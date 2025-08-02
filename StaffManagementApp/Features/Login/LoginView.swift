@@ -61,9 +61,7 @@ extension LoginView {
             keyboardType: .asciiCapable,
             focusTag: .password,
             focusBinding: $focusedField,
-            validate: { _ in
-                return true
-            },
+            validate: { viewModel.validatePassword($0) },
             onSubmit: { focusedField = nil }
         )
         .padding(.top, 8)

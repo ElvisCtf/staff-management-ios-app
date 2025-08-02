@@ -24,6 +24,12 @@ enum TextFieldFocus: Hashable {
         let emailRegex = #"^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"#
         return NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email)
     }
+    
+    func validatePassword(_ password: String) -> Bool {
+        let isLength6To10 = password.count >= 6 && password.count <= 10
+        let isAlphaNumeric = password.isAlphaNumeric
+        return isLength6To10 && isAlphaNumeric
+    }
 
 }
 
