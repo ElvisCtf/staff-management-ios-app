@@ -10,6 +10,7 @@ import SwiftUI
 struct LoginView: View {
     @State private var viewModel = LoginViewModel()
     @FocusState private var focusedField: TextFieldFocus?
+    @Environment(Router.self) private var router
     
     var body: some View {
         VStack {
@@ -39,6 +40,11 @@ struct LoginView: View {
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("Failed to log in.\nDo you want to try again?")
+        }
+        .onChange(of: viewModel.isLoginSuccess) {
+            if viewModel.isLoginSuccess {
+                router.navigateToStaffDirectory()
+            }
         }
     }
 }
@@ -97,4 +103,5 @@ extension LoginView {
 
 #Preview {
     LoginView()
+        .withRouter()
 }
