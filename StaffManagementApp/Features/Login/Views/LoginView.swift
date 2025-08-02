@@ -31,20 +31,19 @@ struct LoginView: View {
         .onAppear {
             focusedField = .email
         }
-        .alert("Error", isPresented: $viewModel.isShowAlert) {
-            Button("Retry") {
-                Task {
-                   await viewModel.login()
-                }
+        .retryAlert(isPresented: $viewModel.isShowAlert) {
+            Task {
+               await viewModel.login()
             }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("Failed to log in.\nDo you want to try again?")
         }
         .onChange(of: viewModel.isLoginSuccess) {
-            if viewModel.isLoginSuccess {
-                router.navigateToStaffDirectory()
-            }
+            goToStaffDirectory(isLoginSuccess: viewModel.isLoginSuccess)
+        }
+    }
+    
+    private func goToStaffDirectory(isLoginSuccess: Bool) {
+        if isLoginSuccess {
+            router.navigateToStaffDirectory()
         }
     }
 }
