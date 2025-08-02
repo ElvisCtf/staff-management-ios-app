@@ -8,6 +8,6 @@
 import Foundation
 
 struct Endpoints {
-    private static let baseURLString = "https://reqres.in/api/"
+    static let baseURL = URL(string: "https://reqres.in/api/")!
     static let login = "login"
 }

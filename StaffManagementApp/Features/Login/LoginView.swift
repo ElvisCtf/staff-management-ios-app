@@ -76,7 +76,9 @@ extension LoginView {
             backgroundColor: .blue,
             disabledColor: .blue.opacity(0.6),
             onPress: {
-                viewModel.login()
+                Task {
+                    await viewModel.login()
+                }
             }
         )
         .padding(.top, 16)

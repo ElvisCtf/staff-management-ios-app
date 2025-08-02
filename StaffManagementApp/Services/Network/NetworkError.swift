@@ -9,6 +9,7 @@ import Foundation
 
 enum NetworkError: LocalizedError {
     case invalidURL
+    case invalidRequest
     case invalidResponse
     case decodingError
     case connectionError
@@ -20,6 +21,8 @@ enum NetworkError: LocalizedError {
         switch self {
         case .invalidURL:
             "Invalid URL."
+        case .invalidRequest:
+            "Invalid URL request."
         case .invalidResponse:
             "Invalid server response."
         case .decodingError:

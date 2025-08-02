@@ -13,7 +13,7 @@ enum HTTPMethod: String {
 }
 
 protocol NetworkManagerProtocol {
-    func send<T: Decodable>(request: URLRequest, as type: T.Type) async -> Result<T, NetworkError>
+    func send<T: Decodable>(_ request: URLRequest, as type: T.Type) async -> Result<T, NetworkError>
 }
 
 final class NetworkManager: NetworkManagerProtocol {
@@ -24,7 +24,7 @@ final class NetworkManager: NetworkManagerProtocol {
         self.session = session
     }
     
-    func send<T: Decodable>(request: URLRequest, as type: T.Type) async -> Result<T, NetworkError> {
+    func send<T: Decodable>(_ request: URLRequest, as type: T.Type) async -> Result<T, NetworkError> {
         do {
             let (data, response) = try await session.data(for: request)
             

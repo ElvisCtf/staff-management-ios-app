@@ -11,25 +11,28 @@ protocol RequestProtocol {
     var method: HTTPMethod { get }
     var baseURL: URL { get }
     var path: String { get }
-    var headers: [String: String]? { get }
-    var parameters: [String: Any]? { get }
+    var queryParams: [String: String]? { get }
+    var body: [String: Any]? { get }
 }
 
 extension RequestProtocol {
-    func urlRequest() throws -> URLRequest {
-        let url = baseURL.appendingPathComponent(path)
+    func create() throws -> URLRequest {
+        var url = baseURL.appendingPathComponent(path)
+        
+        if let queryParams {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+            components?.queryItems = queryParams.map { URLQueryItem(name: $0.key, value: $0.value) }
+            if let composedURL = components?.url {
+                url = composedURL
+            }
+        }
+        
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
-        request.allHTTPHeaderFields = headers
         
-        if let parameters = parameters {
-            if method == .GET {
-                var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-                components?.queryItems = parameters.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
-                request.url = components?.url
-            } else {
-                request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
-            }
+        if method == .POST, let body {
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
         }
         
         return request
