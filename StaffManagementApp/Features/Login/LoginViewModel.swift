@@ -61,7 +61,7 @@ enum TextFieldFocus: Hashable {
         if let token = dto.token, !token.isEmpty {
             
         } else {
-            
+            isShowAlert = true
         }
     }
     
