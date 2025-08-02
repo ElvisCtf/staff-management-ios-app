@@ -39,6 +39,19 @@ struct LoginView: View {
         .onChange(of: viewModel.isLoginSuccess) {
             goToStaffDirectory(isLoginSuccess: viewModel.isLoginSuccess)
         }
+        .retryAlert(isPresented: $viewModel.isShowAlert) {
+            login()
+        }
+    }
+}
+
+
+// MARK: - Methods
+extension LoginView {
+    private func focusEmail() {
+        DispatchQueue.main.async {
+            focusedField = .email
+        }
     }
     
     private func goToStaffDirectory(isLoginSuccess: Bool) {
@@ -46,7 +59,17 @@ struct LoginView: View {
             router.navigateToStaffDirectory()
         }
     }
+    
+    private func login() {
+        let isValid = viewModel.validateFields()
+        if isValid {
+            Task {
+                await viewModel.login()
+            }
+        }
+    }
 }
+
 
 // MARK: - Subviews
 extension LoginView {
@@ -91,9 +114,7 @@ extension LoginView {
             backgroundColor: .blue,
             disabledColor: .blue.opacity(0.6),
             onPress: {
-                Task {
-                    await viewModel.login()
-                }
+                login()
             }
         )
         .padding(.top, 16)

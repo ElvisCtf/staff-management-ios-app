@@ -21,18 +21,21 @@ enum TextFieldFocus: Hashable {
     var isShowAlert = false
     var isLoginSuccess = false
     
-    private let apiService: APIServiceProtocol
-    private let keychainService: KeychainServiceProtocol
+    @ObservationIgnored private let apiService: APIServiceProtocol
+    @ObservationIgnored private let keychainService: KeychainServiceProtocol
     
     init(apiService: APIServiceProtocol = APIService(), keychainService: KeychainServiceProtocol = KeychainService()) {
         self.apiService = apiService
         self.keychainService = keychainService
     }
     
-    func login() async {
+    func validateFields() -> Bool {
         isEmailValid = emailInput.isEmail
         isPasswordValid = passwordInput.isPassword
-        
+        return isEmailValid == true && isPasswordValid == true
+    }
+    
+    func login() async {
         if isEmailValid == true && isPasswordValid == true {
             isLoading = true
             let result = await apiService.postLogin(with: .init(email: emailInput, password: passwordInput))
