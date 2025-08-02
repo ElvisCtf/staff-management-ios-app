@@ -55,7 +55,7 @@ extension LoginView {
             submitLabel: .next,
             focusTag: .email,
             focusBinding: $focusedField,
-            validate: { viewModel.validateEmail($0) },
+            validate: { $0.isEmail },
             onSubmit: { focusedField = .password }
         )
         .padding(.top, 16)
@@ -71,7 +71,7 @@ extension LoginView {
             keyboardType: .asciiCapable,
             focusTag: .password,
             focusBinding: $focusedField,
-            validate: { viewModel.validatePassword($0) },
+            validate: { $0.isPassword },
             onSubmit: { focusedField = nil }
         )
         .padding(.top, 8)
