@@ -39,7 +39,7 @@ extension LoginView {
         FocusableTextField(
             input: $viewModel.emailInput,
             title: "email",
-            isSecure: false,
+            keyboardType: .emailAddress,
             submitLabel: .next,
             focusTag: .email,
             focusBinding: $focusedField,
@@ -53,6 +53,7 @@ extension LoginView {
             input: $viewModel.passwordInput,
             title: "password",
             isSecure: false,
+            keyboardType: .asciiCapable,
             focusTag: .password,
             focusBinding: $focusedField,
             onSubmit: { focusedField = nil }
