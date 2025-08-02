@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct StaffDirectoryView: View {
+    @State private var viewModel = StaffDirectoryViewModel()
+    
     var body: some View {
         Text("Staff Directory")
-            .navigationTitle("Title")
+            .navigationTitle(viewModel.token)
             .navigationBarBackButtonHidden(true)
     }
 }
