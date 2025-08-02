@@ -15,7 +15,6 @@ enum TextFieldFocus: Hashable {
 @Observable final class LoginViewModel {
     var emailInput = ""
     var passwordInput = ""
-    var focus: TextFieldFocus? = nil
 }
 
 
