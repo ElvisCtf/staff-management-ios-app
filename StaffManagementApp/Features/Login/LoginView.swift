@@ -57,7 +57,7 @@ extension LoginView {
             isValid: $viewModel.isPasswordValid,
             title: "password",
             errorMessage: "Your password should be letter and number only,\nand 6 to 10 characters long.",
-            isSecure: false,
+            isSecure: true,
             keyboardType: .asciiCapable,
             focusTag: .password,
             focusBinding: $focusedField,
