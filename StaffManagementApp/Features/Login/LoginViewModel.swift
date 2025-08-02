@@ -15,10 +15,11 @@ enum TextFieldFocus: Hashable {
 @Observable final class LoginViewModel {
     var emailInput = ""
     var passwordInput = ""
-    var isEmailValid = true
-    var isPasswordValid = true
+    var isEmailValid: Bool? = nil
+    var isPasswordValid: Bool? = nil
+    var isLoading = false
     
-    var isInputValid: Bool { isEmailValid && isPasswordValid }
+    var isInputValid: Bool { isEmailValid == true && isPasswordValid == true }
     
     func validateEmail(_ email: String) -> Bool {
         let emailRegex = #"^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"#
@@ -29,6 +30,15 @@ enum TextFieldFocus: Hashable {
         let isLength6To10 = password.count >= 6 && password.count <= 10
         let isAlphaNumeric = password.isAlphaNumeric
         return isLength6To10 && isAlphaNumeric
+    }
+    
+    func login() {
+        isEmailValid = validateEmail(emailInput)
+        isPasswordValid = validatePassword(passwordInput)
+        
+        if isInputValid {
+            isLoading = true
+        }
     }
 
 }

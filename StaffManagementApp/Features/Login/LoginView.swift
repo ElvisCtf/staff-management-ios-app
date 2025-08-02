@@ -16,7 +16,7 @@ struct LoginView: View {
             Text("Welcome!")
                 .font(.system(size: 22, weight: .semibold))
             
-            Text("Please login to continue")
+            Text("Please log in to continue")
                 .font(.system(size: 17, weight: .regular))
                 .padding(.top, 4)
             
@@ -68,16 +68,17 @@ extension LoginView {
     }
     
     @ViewBuilder private var LoginButton: some View {
-        Button(action: {
-            
-        }) {
-            Text("Login")
-                .font(.system(size: 17, weight: .medium))
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity, maxHeight: 44)
-                .background(Color.blue)
-                .cornerRadius(8)
-        }
+        LoadingButton(
+            isLoading: $viewModel.isLoading,
+            title: "Log In",
+            font: .system(size: 17, weight: .medium),
+            textColor: .white,
+            backgroundColor: .blue,
+            disabledColor: .blue.opacity(0.6),
+            onPress: {
+                viewModel.login()
+            }
+        )
         .padding(.top, 16)
     }
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FocusableTextField: View {
     @Binding var input: String
-    @Binding var isValid: Bool
+    @Binding var isValid: Bool?
     
     var title: String
     var errorMessage: String
@@ -38,11 +38,13 @@ struct FocusableTextField: View {
             .disableAutocorrection(true)
             .submitLabel(submitLabel)
             .onChange(of: input) { _, newValue in
-                isValid = validate(newValue)
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    isValid = validate(newValue)
+                }
             }
             .onSubmit(onSubmit)
             
-            if !isValid {
+            if isValid == false {
                 Text(errorMessage)
                     .font(.system(size: 12, weight: .regular))
                     .foregroundColor(.red)
