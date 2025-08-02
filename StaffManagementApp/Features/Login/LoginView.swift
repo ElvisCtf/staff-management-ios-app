@@ -30,6 +30,16 @@ struct LoginView: View {
         .onAppear {
             focusedField = .email
         }
+        .alert("Error", isPresented: $viewModel.isShowAlert) {
+            Button("Retry") {
+                Task {
+                   await viewModel.login()
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Failed to log in.\nDo you want to try again?")
+        }
     }
 }
 

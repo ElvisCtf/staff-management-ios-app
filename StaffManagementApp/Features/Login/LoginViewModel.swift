@@ -18,6 +18,7 @@ enum TextFieldFocus: Hashable {
     var isEmailValid: Bool? = nil
     var isPasswordValid: Bool? = nil
     var isLoading = false
+    var isShowAlert = false
     
     var isInputValid: Bool { isEmailValid == true && isPasswordValid == true }
     
@@ -51,7 +52,7 @@ enum TextFieldFocus: Hashable {
             case .success(let dto):
                 handleSuccess(with: dto)
             case .failure(let error):
-                print(error)
+                handError(with: error)
             }
         }
     }
@@ -64,8 +65,8 @@ enum TextFieldFocus: Hashable {
         }
     }
     
-    private func handError() {
-        
+    private func handError(with error: NetworkError) {
+        isShowAlert = true
     }
 
 }
