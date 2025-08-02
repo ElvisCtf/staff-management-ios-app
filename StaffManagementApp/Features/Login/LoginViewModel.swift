@@ -20,8 +20,6 @@ enum TextFieldFocus: Hashable {
     var isLoading = false
     var isShowAlert = false
     
-    var isInputValid: Bool { isEmailValid == true && isPasswordValid == true }
-    
     private let apiService: APIServiceProtocol
     
     init(apiService: APIServiceProtocol = APIService()) {
@@ -43,7 +41,7 @@ enum TextFieldFocus: Hashable {
         isEmailValid = validateEmail(emailInput)
         isPasswordValid = validatePassword(passwordInput)
         
-        if isInputValid {
+        if isEmailValid == true && isPasswordValid == true {
             isLoading = true
             let result = await apiService.postLogin(with: .init(email: emailInput, password: passwordInput))
             isLoading = false
