@@ -19,11 +19,14 @@ enum TextFieldFocus: Hashable {
     var isPasswordValid: Bool? = nil
     var isLoading = false
     var isShowAlert = false
+    var isLoginSuccess = false
     
     private let apiService: APIServiceProtocol
+    private let keychainService: KeychainServiceProtocol
     
-    init(apiService: APIServiceProtocol = APIService()) {
+    init(apiService: APIServiceProtocol = APIService(), keychainService: KeychainServiceProtocol = KeychainService()) {
         self.apiService = apiService
+        self.keychainService = keychainService
     }
     
     func validateEmail(_ email: String) -> Bool {
@@ -57,7 +60,8 @@ enum TextFieldFocus: Hashable {
     
     private func handleSuccess(with dto: LoginResponseDto) {
         if let token = dto.token, !token.isEmpty {
-            
+            keychainService.saveToken(token)
+            isLoginSuccess = true
         } else {
             isShowAlert = true
         }
