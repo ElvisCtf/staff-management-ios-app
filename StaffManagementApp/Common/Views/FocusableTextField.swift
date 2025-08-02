@@ -8,16 +8,17 @@
 import SwiftUI
 
 struct FocusableTextField: View {
-    @State private var isInvalid = false
-    
     @Binding var input: String
+    @Binding var isValid: Bool
+    
     var title: String
+    var errorMessage: String
     var isSecure: Bool = false
     var keyboardType : UIKeyboardType = .default
-    var errorMessage: String = ""
     var submitLabel: SubmitLabel = .done
     var focusTag: TextFieldFocus
     var focusBinding: FocusState<TextFieldFocus?>.Binding
+    var validate: (String) -> Bool
     var onSubmit: () -> Void = { }
     
     var body: some View {
@@ -36,9 +37,12 @@ struct FocusableTextField: View {
             .textInputAutocapitalization(.never)
             .disableAutocorrection(true)
             .submitLabel(submitLabel)
+            .onChange(of: input) { _, newValue in
+                isValid = validate(newValue)
+            }
             .onSubmit(onSubmit)
             
-            if isInvalid {
+            if !isValid {
                 Text(errorMessage)
                     .font(.system(size: 12, weight: .regular))
                     .foregroundColor(.red)
