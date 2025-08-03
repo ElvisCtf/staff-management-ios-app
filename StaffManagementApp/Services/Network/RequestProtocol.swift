@@ -30,6 +30,8 @@ extension RequestProtocol {
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
         
+        request.setValue("reqres-free-v1", forHTTPHeaderField: "x-api-key")
+        
         if method == .POST, let body {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
