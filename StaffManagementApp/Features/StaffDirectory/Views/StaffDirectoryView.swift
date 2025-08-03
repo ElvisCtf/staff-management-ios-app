@@ -1,0 +1,39 @@
+//
+//  StaffDirectoryView.swift
+//  StaffManagementApp
+//
+//  Created by Elvis Cheng on 2/8/2025.
+//
+
+import SwiftUI
+
+struct StaffDirectoryView: View {
+    @State var viewModel = StaffDirectoryViewModel(apiService: APIService(), keychainService: KeychainService())
+    
+    var body: some View {
+        List {
+            ForEach(viewModel.staffs, id: \.id) { staff in
+                StaffRowView(staff: staff)
+                    .onAppear {
+                        Task {
+                           await viewModel.loadMoreIfNeeded(current: staff)
+                        }
+                    }
+            }
+            
+            if viewModel.isLoadingMore {
+                ProgressRowView()
+            }
+        }
+        .listStyle(.insetGrouped)
+        .navigationTitle(viewModel.token)
+        .navigationBarBackButtonHidden(true)
+        .task {
+            await viewModel.getUsers()
+        }
+    }
+}
+
+#Preview {
+    StaffDirectoryView()
+}
