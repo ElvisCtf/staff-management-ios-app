@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LoginView: View {
-    @State private var viewModel = LoginViewModel()
+    @State private var viewModel = LoginViewModel(apiService: APIService(), keychainService: KeychainService())
     @FocusState private var focusedField: TextFieldFocus?
     @Environment(Router.self) private var router
     
@@ -107,7 +107,9 @@ extension LoginView {
             backgroundColor: .blue,
             disabledColor: .blue.opacity(0.6),
             onPress: {
-                login()
+                Task {
+                    await login()
+                }
             }
         )
         .padding(.top, 16)
