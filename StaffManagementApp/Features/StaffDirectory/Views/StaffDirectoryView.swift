@@ -9,6 +9,7 @@ import SwiftUI
 
 struct StaffDirectoryView: View {
     @State var viewModel = StaffDirectoryViewModel(apiService: APIService(), keychainService: KeychainService())
+    @Environment(Router.self) private var router
     
     var body: some View {
         List {
@@ -29,7 +30,16 @@ struct StaffDirectoryView: View {
         .navigationTitle(viewModel.token)
         .navigationBarBackButtonHidden(true)
         .task {
+            viewModel.getToken()
             await viewModel.getUsers()
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Logout") {
+                    viewModel.logout()
+                    router.popToRoot()
+                }
+            }
         }
     }
 }

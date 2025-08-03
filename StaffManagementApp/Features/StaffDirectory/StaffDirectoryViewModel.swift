@@ -10,8 +10,7 @@ import SwiftUI
 @Observable final class StaffDirectoryViewModel {
     var staffs: [User] = []
     var isLoadingMore = false
-    
-    @ObservationIgnored var token = ""
+   var token = ""
     
     @ObservationIgnored var nextPage = 1
     @ObservationIgnored var numberOfPages = 0
@@ -22,8 +21,14 @@ import SwiftUI
     init(apiService: APIServiceProtocol, keychainService: KeychainServiceProtocol) {
         self.apiService = apiService
         self.keychainService = keychainService
-        
+    }
+    
+    func getToken() {
         token = keychainService.readToken() ?? ""
+    }
+    
+    func logout() {
+        keychainService.deleteToken()
     }
     
     func loadMoreIfNeeded(current: User) async {
