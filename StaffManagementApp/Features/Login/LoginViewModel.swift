@@ -27,6 +27,13 @@ enum TextFieldFocus: Hashable {
         self.keychainService = keychainService
     }
     
+    func checkTokenExist() -> Bool {
+        if let token = keychainService.readToken() {
+            return !token.isEmpty
+        }
+        return false
+    }
+    
     func isInputValid() -> Bool {
         return emailInput.isEmail && passwordInput.isPassword
     }

@@ -29,6 +29,7 @@ struct LoginView: View {
         }
         .padding(24)
         .onAppear {
+            viewModel.isLoginSuccess = viewModel.checkTokenExist()
             focusedField = .email
         }
         .onChange(of: viewModel.isLoginSuccess) {
