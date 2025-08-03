@@ -11,8 +11,19 @@ struct StaffDirectoryView: View {
     @State var viewModel = StaffDirectoryViewModel()
     
     var body: some View {
-        List(viewModel.staffs) { staff in
-            StaffRowView(staff: staff)
+        List {
+            ForEach(viewModel.staffs, id: \.id) { staff in
+                StaffRowView(staff: staff)
+                    .onAppear {
+                        Task {
+                           await viewModel.loadMoreIfNeeded(current: staff)
+                        }
+                    }
+            }
+            
+            if viewModel.isLoadingMore {
+                ProgressRowView()
+            }
         }
         .listStyle(.insetGrouped)
         .navigationTitle(viewModel.token)

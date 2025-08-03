@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProfileImageView: View {
     let url: URL?
+    let size: CGFloat
 
     var body: some View {
         AsyncImage(url: url) { phase in
@@ -19,13 +20,16 @@ struct ProfileImageView: View {
             case .success(let image):
                 image
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .scaledToFill()
+                    .cornerRadius(size / 2)
+                    .frame(width: size, height: size)
                     .clipShape(Circle())
             case .failure:
                 Image(systemName: "person.circle")
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .scaledToFit()
                     .foregroundColor(.blue)
+                    .frame(width: size, height: size)
             @unknown default:
                 EmptyView()
             }

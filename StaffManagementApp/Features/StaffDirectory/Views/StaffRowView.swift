@@ -9,11 +9,14 @@ import SwiftUI
 
 struct StaffRowView: View {
     var staff: User
+    let profileSize: CGFloat = 48
     
     var body: some View {
         HStack() {
-            ProfileImageView(url: URL(string: staff.avatar)!)
-                .frame(width: 48, height: 48)
+            ProfileImageView(
+                url: URL(string: staff.avatar)!,
+                size: profileSize
+            ).frame(width: profileSize, height: profileSize)
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(staff.firstName + " " + staff.lastName)

@@ -9,9 +9,13 @@ import SwiftUI
 
 @Observable final class StaffDirectoryViewModel {
     var staffs: [User] = []
+    var isLoadingMore = false
     
     @ObservationIgnored var token = ""
-    @ObservationIgnored var currentPage = 1
+    
+    @ObservationIgnored var nextPage = 1
+    @ObservationIgnored var numberOfPages = 0
+    
     @ObservationIgnored private let apiService: APIServiceProtocol
     @ObservationIgnored private let keychainService: KeychainServiceProtocol
     
@@ -22,17 +26,31 @@ import SwiftUI
         token = keychainService.readToken() ?? ""
     }
     
+    func loadMoreIfNeeded(current: User) async {
+        if current == staffs.last && isStillHavePages() && !isLoadingMore {
+            nextPage += 1
+            isLoadingMore = true
+            await getUsers()
+            isLoadingMore = false
+        }
+    }
+    
     func getUsers() async {
-        let result = await apiService.getUsers(on: currentPage)
+        let result = await apiService.getUsers(on: nextPage)
         switch result {
         case .success(let dto):
-            handleSuccess(with: dto.users)
+            handleSuccess(with: dto)
         case .failure(_):
             ()
         }
     }
     
-    private func handleSuccess(with users: [User]) {
-        staffs += users
+    private func handleSuccess(with dto: UsersResponseDto) {
+        numberOfPages = dto.totalPages
+        staffs += dto.users
+    }
+    
+    private func isStillHavePages() -> Bool {
+        return nextPage < numberOfPages
     }
 }

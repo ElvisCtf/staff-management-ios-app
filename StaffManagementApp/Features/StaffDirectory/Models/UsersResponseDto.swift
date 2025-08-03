@@ -21,7 +21,7 @@ struct UsersResponseDto: Decodable {
     }
 }
 
-struct User: Decodable, Identifiable {
+struct User: Decodable, Identifiable, Equatable {
     let id: Int
     let email: String
     let firstName: String
