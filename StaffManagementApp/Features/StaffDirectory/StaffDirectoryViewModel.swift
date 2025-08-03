@@ -8,6 +8,8 @@
 import SwiftUI
 
 @Observable final class StaffDirectoryViewModel {
+    var staffs: [User] = []
+    
     @ObservationIgnored var token = ""
     @ObservationIgnored var currentPage = 1
     @ObservationIgnored private let apiService: APIServiceProtocol
@@ -31,5 +33,6 @@ import SwiftUI
     }
     
     private func handleSuccess(with users: [User]) {
+        staffs += users
     }
 }

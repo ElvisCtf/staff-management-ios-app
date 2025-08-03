@@ -5,8 +5,6 @@
 //  Created by Elvis Cheng on 3/8/2025.
 //
 
-import Foundation
-
 struct UsersResponseDto: Decodable {
     let page: Int
     let perPage: Int
@@ -23,7 +21,7 @@ struct UsersResponseDto: Decodable {
     }
 }
 
-struct User: Decodable {
+struct User: Decodable, Identifiable {
     let id: Int
     let email: String
     let firstName: String
