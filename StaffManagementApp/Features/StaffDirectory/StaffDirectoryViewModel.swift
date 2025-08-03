@@ -9,6 +9,7 @@ import SwiftUI
 
 @Observable final class StaffDirectoryViewModel {
     @ObservationIgnored var token = ""
+    @ObservationIgnored var currentPage = 1
     @ObservationIgnored private let apiService: APIServiceProtocol
     @ObservationIgnored private let keychainService: KeychainServiceProtocol
     
@@ -17,5 +18,18 @@ import SwiftUI
         self.keychainService = keychainService
         
         token = keychainService.readToken() ?? ""
+    }
+    
+    func getUsers() async {
+        let result = await apiService.getUsers(on: currentPage)
+        switch result {
+        case .success(let dto):
+            handleSuccess(with: dto.users)
+        case .failure(_):
+            ()
+        }
+    }
+    
+    private func handleSuccess(with users: [User]) {
     }
 }

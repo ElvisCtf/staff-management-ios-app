@@ -10,4 +10,5 @@ import Foundation
 struct Endpoints {
     static let baseURL = URL(string: "https://reqres.in/api/")!
     static let login = "login"
+    static let users = "users"
 }

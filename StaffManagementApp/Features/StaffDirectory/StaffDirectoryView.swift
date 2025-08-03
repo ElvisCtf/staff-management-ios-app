@@ -14,5 +14,8 @@ struct StaffDirectoryView: View {
         Text("Staff Directory")
             .navigationTitle(viewModel.token)
             .navigationBarBackButtonHidden(true)
+            .task {
+                await viewModel.getUsers()
+            }
     }
 }
