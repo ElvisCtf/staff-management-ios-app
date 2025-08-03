@@ -21,28 +21,26 @@ struct LoginView: View {
                 .font(.system(size: 17, weight: .regular))
                 .padding(.top, 4)
             
-            EmailTextField
+            emailTextField
             
-            PasswordTextField
+            passwordTextField
             
-            LoginButton
+            loginButton
         }
         .padding(24)
         .onAppear {
             focusedField = .email
         }
-        .retryAlert(isPresented: $viewModel.isShowAlert) {
-            Task {
-               await viewModel.login()
-            }
-        }
         .onChange(of: viewModel.isLoginSuccess) {
             goToStaffDirectory(isLoginSuccess: viewModel.isLoginSuccess)
         }
         .retryAlert(isPresented: $viewModel.isShowAlert) {
-            login()
+            Task {
+               await login()
+            }
         }
     }
+    
 }
 
 
@@ -60,12 +58,9 @@ extension LoginView {
         }
     }
     
-    private func login() {
-        let isValid = viewModel.validateFields()
-        if isValid {
-            Task {
-                await viewModel.login()
-            }
+    private func login() async {
+        if viewModel.isInputValid() {
+            await viewModel.login()
         }
     }
 }
@@ -73,10 +68,9 @@ extension LoginView {
 
 // MARK: - Subviews
 extension LoginView {
-    @ViewBuilder private var EmailTextField: some View {
+    @ViewBuilder private var emailTextField: some View {
         FocusableTextField(
             input: $viewModel.emailInput,
-            isValid: $viewModel.isEmailValid,
             title: "email",
             errorMessage: "Your email is incorrect.",
             keyboardType: .emailAddress,
@@ -89,10 +83,9 @@ extension LoginView {
         .padding(.top, 16)
     }
     
-    @ViewBuilder private var PasswordTextField: some View {
+    @ViewBuilder private var passwordTextField: some View {
         FocusableTextField(
             input: $viewModel.passwordInput,
-            isValid: $viewModel.isPasswordValid,
             title: "password",
             errorMessage: "Your password should be letter and number only,\nand 6 to 10 characters long.",
             isSecure: true,
@@ -105,7 +98,7 @@ extension LoginView {
         .padding(.top, 8)
     }
     
-    @ViewBuilder private var LoginButton: some View {
+    @ViewBuilder private var loginButton: some View {
         LoadingButton(
             isLoading: $viewModel.isLoading,
             title: "Log In",

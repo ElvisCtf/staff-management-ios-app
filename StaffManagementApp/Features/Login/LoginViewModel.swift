@@ -15,8 +15,6 @@ enum TextFieldFocus: Hashable {
 @Observable final class LoginViewModel {
     var emailInput = ""
     var passwordInput = ""
-    var isEmailValid: Bool? = nil
-    var isPasswordValid: Bool? = nil
     var isLoading = false
     var isShowAlert = false
     var isLoginSuccess = false
@@ -29,40 +27,35 @@ enum TextFieldFocus: Hashable {
         self.keychainService = keychainService
     }
     
-    func validateFields() -> Bool {
-        isEmailValid = emailInput.isEmail
-        isPasswordValid = passwordInput.isPassword
-        return isEmailValid == true && isPasswordValid == true
+    func isInputValid() -> Bool {
+        return emailInput.isEmail && passwordInput.isPassword
     }
     
     func login() async {
-        if isEmailValid == true && isPasswordValid == true {
+        if isInputValid() {
             isLoading = true
             let result = await apiService.postLogin(with: .init(email: emailInput, password: passwordInput))
             isLoading = false
             
             switch result {
             case .success(let dto):
-                handleSuccess(with: dto)
-            case .failure(let error):
-                handError(with: error)
+                (isLoginSuccess, isShowAlert) = handleSuccess(with: dto)
+                if isLoginSuccess {
+                    keychainService.saveToken(dto.token!)
+                }
+            case .failure(_):
+                isShowAlert = true
             }
         }
     }
     
-    private func handleSuccess(with dto: LoginResponseDto) {
+    private func handleSuccess(with dto: LoginResponseDto) -> (shouldGoDirectory: Bool, shouldShowAlert: Bool) {
         if let token = dto.token, !token.isEmpty {
-            keychainService.saveToken(token)
-            isLoginSuccess = true
+            return (true, false)
         } else {
-            isShowAlert = true
+            return (false, true)
         }
     }
-    
-    private func handError(with error: NetworkError) {
-        isShowAlert = true
-    }
-
 }
 
 
