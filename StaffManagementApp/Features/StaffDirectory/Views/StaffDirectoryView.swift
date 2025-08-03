@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct StaffDirectoryView: View {
-    @State var viewModel = StaffDirectoryViewModel()
+    @State var viewModel = StaffDirectoryViewModel(apiService: APIService(), keychainService: KeychainService())
     
     var body: some View {
         List {

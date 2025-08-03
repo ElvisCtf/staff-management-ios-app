@@ -19,7 +19,7 @@ import SwiftUI
     @ObservationIgnored private let apiService: APIServiceProtocol
     @ObservationIgnored private let keychainService: KeychainServiceProtocol
     
-    init(apiService: APIServiceProtocol = APIService(), keychainService: KeychainServiceProtocol = KeychainService()) {
+    init(apiService: APIServiceProtocol, keychainService: KeychainServiceProtocol) {
         self.apiService = apiService
         self.keychainService = keychainService
         
@@ -27,7 +27,7 @@ import SwiftUI
     }
     
     func loadMoreIfNeeded(current: User) async {
-        if current == staffs.last && isStillHavePages() && !isLoadingMore {
+        if shouldLoadMore(current) {
             nextPage += 1
             isLoadingMore = true
             await getUsers()
@@ -50,7 +50,8 @@ import SwiftUI
         staffs += dto.users
     }
     
-    private func isStillHavePages() -> Bool {
-        return nextPage < numberOfPages
+    private func shouldLoadMore(_ current: User) -> Bool {
+        let isStillHavePages = nextPage < numberOfPages
+        return current == staffs.last && isStillHavePages && !isLoadingMore
     }
 }
