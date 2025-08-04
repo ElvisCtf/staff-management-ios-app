@@ -14,7 +14,11 @@ enum TextFieldFocus: Hashable {
 
 @Observable final class LoginViewModel {
     var emailInput = ""
+    var isEmailValid: Bool? = nil
+    
     var passwordInput = ""
+    var isPasswordValid: Bool? = nil
+    
     var isLoading = false
     var isShowAlert = false
     var isLoginSuccess = false
@@ -34,8 +38,9 @@ enum TextFieldFocus: Hashable {
         return false
     }
     
-    func isInputValid() -> Bool {
-        return emailInput.isEmail && passwordInput.isPassword
+    func updateValidState() {
+        isEmailValid = emailInput.isEmail
+        isPasswordValid = passwordInput.isPassword
     }
     
     func login() async {
@@ -54,6 +59,10 @@ enum TextFieldFocus: Hashable {
                 isShowAlert = true
             }
         }
+    }
+    
+    func isInputValid() -> Bool {
+        return isEmailValid == true && isPasswordValid == true
     }
     
     private func handleSuccess(with dto: LoginResponseDto) -> (shouldGoDirectory: Bool, shouldShowAlert: Bool) {

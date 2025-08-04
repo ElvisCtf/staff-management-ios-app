@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FocusableTextField: View {
     @Binding var input: String
-    @State var isValid: Bool? = nil
+    @Binding var isValid: Bool?
     
     var title: String
     var errorMessage: String

@@ -72,6 +72,7 @@ extension LoginView {
     @ViewBuilder private var emailTextField: some View {
         FocusableTextField(
             input: $viewModel.emailInput,
+            isValid: $viewModel.isEmailValid,
             title: "email",
             errorMessage: "Your email is incorrect.",
             keyboardType: .emailAddress,
@@ -87,6 +88,7 @@ extension LoginView {
     @ViewBuilder private var passwordTextField: some View {
         FocusableTextField(
             input: $viewModel.passwordInput,
+            isValid: $viewModel.isPasswordValid,
             title: "password",
             errorMessage: "Your password should be letter and number only,\nand 6 to 10 characters long.",
             isSecure: true,
@@ -108,6 +110,7 @@ extension LoginView {
             backgroundColor: .blue,
             disabledColor: .blue.opacity(0.6),
             onPress: {
+                viewModel.updateValidState()
                 Task {
                     await login()
                 }
