@@ -11,10 +11,6 @@ import Security
 final class KeychainHelper {
     static let shared = KeychainHelper()
     
-    private let service = "\(Bundle.main.bundleIdentifier ?? "com.elvis.StaffManagementApp").token"
-    private let account = ""
-
-
     func save(_ data: Data, service: String, account: String) {
         let query: [String: Any] = [
             kSecClass as String       : kSecClassGenericPassword,
