@@ -29,8 +29,9 @@ struct StaffDirectoryView: View {
             viewModel.setDatabaseService(DatabaseService(context: context))
         }
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Logout") {
+            ToolbarItemGroup(placement: .bottomBar) {
+                Spacer()
+                Button("Log Out") {
                     viewModel.logout()
                     router.popToRoot()
                 }
