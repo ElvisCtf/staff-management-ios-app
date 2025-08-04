@@ -10,6 +10,7 @@ import SwiftUI
 struct StaffDirectoryView: View {
     @State var viewModel = StaffDirectoryViewModel(apiService: APIService(), keychainService: KeychainService())
     @Environment(Router.self) private var router
+    @Environment(\.modelContext) private var context
     
     var body: some View {
         List {
@@ -32,6 +33,9 @@ struct StaffDirectoryView: View {
         .task {
             viewModel.getToken()
             await viewModel.getUsers()
+        }
+        .onAppear {
+            viewModel.setDatabaseService(DatabaseService(context: context))
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {

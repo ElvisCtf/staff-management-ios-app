@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct StaffManagementAppApp: App {
@@ -14,5 +15,6 @@ struct StaffManagementAppApp: App {
             LoginView()
                 .withRouter()
         }
+        .modelContainer(for: [Staff.self])
     }
 }

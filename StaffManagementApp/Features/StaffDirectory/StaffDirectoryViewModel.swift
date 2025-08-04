@@ -10,17 +10,22 @@ import SwiftUI
 @Observable final class StaffDirectoryViewModel {
     var staffs: [User] = []
     var isLoadingMore = false
-   var token = ""
+    var token = ""
     
     @ObservationIgnored var nextPage = 1
     @ObservationIgnored var numberOfPages = 0
     
     @ObservationIgnored private let apiService: APIServiceProtocol
     @ObservationIgnored private let keychainService: KeychainServiceProtocol
+    @ObservationIgnored private var databseService: DatabaseServiceProtocol? = nil
     
     init(apiService: APIServiceProtocol, keychainService: KeychainServiceProtocol) {
         self.apiService = apiService
         self.keychainService = keychainService
+    }
+    
+    func setDatabaseService(_ dbService: DatabaseServiceProtocol?) {
+        databseService = dbService
     }
     
     func getToken() {
