@@ -7,8 +7,14 @@
 
 import SwiftUI
 
+enum DataState {
+    case empty
+    case hasData
+}
+
 @Observable final class StaffDirectoryViewModel {
     var staffs: [Staff] = []
+    var state: DataState = .empty
     var isLoadingMore = false
     var token = ""
     
@@ -60,6 +66,10 @@ import SwiftUI
         numberOfPages = dto.totalPages
         let fetchedStaffs = dto.users.map { Staff(id: $0.id, email: $0.email, firstName: $0.firstName, lastName: $0.lastName, avatar: $0.avatar) }
         staffs += fetchedStaffs
+        
+        if state == .empty {
+            state = .hasData
+        }
     }
     
     private func shouldLoadMore(_ current: Staff) -> Bool {

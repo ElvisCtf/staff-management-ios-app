@@ -14,26 +14,16 @@ struct StaffDirectoryView: View {
     
     var body: some View {
         List {
-            ForEach(viewModel.staffs, id: \.id) { staff in
-                StaffRowView(staff: staff)
-                    .onAppear {
-                        Task {
-                           await viewModel.loadMoreIfNeeded(current: staff)
-                        }
-                    }
-            }
-            
-            if viewModel.isLoadingMore {
-                ProgressRowView()
+            switch viewModel.state {
+            case .empty:
+                emptyView
+            case .hasData:
+                staffListView
             }
         }
         .listStyle(.insetGrouped)
         .navigationTitle(viewModel.token)
         .navigationBarBackButtonHidden(true)
-        .task {
-            viewModel.getToken()
-            await viewModel.getUsers()
-        }
         .onAppear {
             viewModel.getToken()
             viewModel.setDatabaseService(DatabaseService(context: context))
@@ -45,6 +35,35 @@ struct StaffDirectoryView: View {
                     router.popToRoot()
                 }
             }
+        }
+    }
+}
+
+
+// MARK: - Subviews
+extension StaffDirectoryView {
+    @ViewBuilder private var emptyView: some View {
+        Text("No colleague found.")
+            .frame(maxWidth: .infinity, alignment: .center)
+            .onAppear {
+                Task {
+                    await viewModel.getUsers()
+                }
+            }
+    }
+    
+    @ViewBuilder private var staffListView: some View {
+        ForEach(viewModel.staffs, id: \.id) { staff in
+            StaffRowView(staff: staff)
+                .onAppear {
+                    Task {
+                       await viewModel.loadMoreIfNeeded(current: staff)
+                    }
+                }
+        }
+        
+        if viewModel.isLoadingMore {
+            ProgressRowView()
         }
     }
 }
