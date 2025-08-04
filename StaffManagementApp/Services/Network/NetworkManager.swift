@@ -52,7 +52,7 @@ final class NetworkManager: NetworkManagerProtocol {
             ()
         case 400...499:
             throw NetworkError.clientError(response.statusCode)
-        case 5000...599:
+        case 500...599:
             throw NetworkError.serverError(response.statusCode)
         default:
             throw NetworkError.unknownError(response.statusCode)
