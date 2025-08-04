@@ -8,7 +8,7 @@
 import SwiftUI
 
 @Observable final class StaffDirectoryViewModel {
-    var staffs: [User] = []
+    var staffs: [Staff] = []
     var isLoadingMore = false
     var token = ""
     
@@ -17,7 +17,8 @@ import SwiftUI
     
     @ObservationIgnored private let apiService: APIServiceProtocol
     @ObservationIgnored private let keychainService: KeychainServiceProtocol
-    @ObservationIgnored private var databseService: DatabaseServiceProtocol? = nil
+    @ObservationIgnored private var databaseService: DatabaseServiceProtocol? = nil
+    @ObservationIgnored private var isOfflinMode = false
     
     init(apiService: APIServiceProtocol, keychainService: KeychainServiceProtocol) {
         self.apiService = apiService
@@ -25,7 +26,7 @@ import SwiftUI
     }
     
     func setDatabaseService(_ dbService: DatabaseServiceProtocol?) {
-        databseService = dbService
+        databaseService = dbService
     }
     
     func getToken() {
@@ -36,7 +37,7 @@ import SwiftUI
         keychainService.deleteToken()
     }
     
-    func loadMoreIfNeeded(current: User) async {
+    func loadMoreIfNeeded(current: Staff) async {
         if shouldLoadMore(current) {
             nextPage += 1
             isLoadingMore = true
@@ -57,10 +58,11 @@ import SwiftUI
     
     private func handleSuccess(with dto: UsersResponseDto) {
         numberOfPages = dto.totalPages
-        staffs += dto.users
+        let fetchedStaffs = dto.users.map { Staff(id: $0.id, email: $0.email, firstName: $0.firstName, lastName: $0.lastName, avatar: $0.avatar) }
+        staffs += fetchedStaffs
     }
     
-    private func shouldLoadMore(_ current: User) -> Bool {
+    private func shouldLoadMore(_ current: Staff) -> Bool {
         let isStillHavePages = nextPage < numberOfPages
         return current == staffs.last && isStillHavePages && !isLoadingMore
     }

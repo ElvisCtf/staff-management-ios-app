@@ -35,6 +35,7 @@ struct StaffDirectoryView: View {
             await viewModel.getUsers()
         }
         .onAppear {
+            viewModel.getToken()
             viewModel.setDatabaseService(DatabaseService(context: context))
         }
         .toolbar {

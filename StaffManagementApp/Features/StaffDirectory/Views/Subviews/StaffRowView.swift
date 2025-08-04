@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct StaffRowView: View {
-    var staff: User
+    var staff: Staff
     let profileSize: CGFloat = 48
     
     var body: some View {
@@ -33,7 +33,7 @@ struct StaffRowView: View {
 }
 
 #Preview {
-    let staff = User(
+    let staff = Staff(
         id: 1,
         email: "abc@gmail.com",
         firstName: "Peter",
