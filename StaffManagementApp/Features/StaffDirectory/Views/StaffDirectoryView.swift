@@ -25,7 +25,6 @@ struct StaffDirectoryView: View {
         .navigationTitle(viewModel.token)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            viewModel.getToken()
             viewModel.setDatabaseService(DatabaseService(context: context))
         }
         .toolbar {
@@ -48,7 +47,7 @@ extension StaffDirectoryView {
             .frame(maxWidth: .infinity, alignment: .center)
             .onAppear {
                 Task {
-                    await viewModel.getUsers()
+                    await viewModel.getStaffs()
                 }
             }
     }

@@ -24,35 +24,42 @@ enum DataState {
     @ObservationIgnored private let apiService: APIServiceProtocol
     @ObservationIgnored private let keychainService: KeychainServiceProtocol
     @ObservationIgnored private var databaseService: DatabaseServiceProtocol? = nil
-    @ObservationIgnored private var isOfflinMode = false
+    @ObservationIgnored private var isOfflineMode = false
     
     init(apiService: APIServiceProtocol, keychainService: KeychainServiceProtocol) {
         self.apiService = apiService
         self.keychainService = keychainService
+        token = keychainService.readToken() ?? ""
     }
     
     func setDatabaseService(_ dbService: DatabaseServiceProtocol?) {
         databaseService = dbService
-    }
-    
-    func getToken() {
-        token = keychainService.readToken() ?? ""
+        if let cachedStaff = dbService?.getStaffs(), !cachedStaff.isEmpty {
+            staffs = cachedStaff
+            state = .hasData
+            isOfflineMode = true
+        }
     }
     
     func logout() {
         keychainService.deleteToken()
+        databaseService?.clearStaffs()
     }
     
     func loadMoreIfNeeded(current: Staff) async {
+        guard !isOfflineMode else { return }
+        
         if shouldLoadMore(current) {
             nextPage += 1
             isLoadingMore = true
-            await getUsers()
+            await getStaffs()
             isLoadingMore = false
         }
     }
     
-    func getUsers() async {
+    func getStaffs() async {
+        guard !isOfflineMode else { return }
+        
         let result = await apiService.getUsers(on: nextPage)
         switch result {
         case .success(let dto):
@@ -66,6 +73,7 @@ enum DataState {
         numberOfPages = dto.totalPages
         let fetchedStaffs = dto.users.map { Staff(id: $0.id, email: $0.email, firstName: $0.firstName, lastName: $0.lastName, avatar: $0.avatar) }
         staffs += fetchedStaffs
+        databaseService?.cacheStaffs(fetchedStaffs)
         
         if state == .empty {
             state = .hasData

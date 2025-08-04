@@ -6,12 +6,12 @@
 //
 
 import SwiftData
+import Foundation
 
 protocol DatabaseServiceProtocol {
     var context: ModelContext { get }
     
-    func cacheStaffs(_ users: [User])
-    func getUsers() -> [User]
+    func cacheStaffs(_ staffs: [Staff])
     func getStaffs() -> [Staff]
     func clearStaffs()
 }
@@ -23,31 +23,19 @@ final class DatabaseService: DatabaseServiceProtocol {
         self.context = context
     }
     
-    func cacheStaffs(_ users: [User]) {
-        for user in users {
-            let contact = Staff(id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, avatar: user.avatar)
-            context.insert(contact)
+    func cacheStaffs(_ staffs: [Staff]) {
+        for staff in staffs {
+            context.insert(staff)
         }
         try? context.save()
     }
-    
-    func getUsers() -> [User] {
-        let staffs = getStaffs()
-        return staffs.map {
-            User(id: $0.id, email: $0.email, firstName: $0.firstName, lastName: $0.lastName, avatar: $0.avatar)
-        }
-    }
 
     func getStaffs() -> [Staff] {
-        let descriptor = FetchDescriptor<Staff>()
+        let descriptor = FetchDescriptor<Staff>(sortBy: [SortDescriptor(\.id, order: .forward)])
         return (try? context.fetch(descriptor)) ?? []
     }
 
     func clearStaffs() {
-        let staffs = getStaffs()
-        for staff in staffs {
-            context.delete(staff)
-        }
-        try? context.save()
+        try? context.delete(model: Staff.self)
     }
 }
