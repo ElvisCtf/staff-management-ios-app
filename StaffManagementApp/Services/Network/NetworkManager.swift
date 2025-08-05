@@ -32,7 +32,9 @@ final class NetworkManager: NetworkManagerProtocol {
                 return .failure(.invalidResponse)
             }
             
-            try validateResponse(httpResponse)
+            if let error = validateResponse(httpResponse) {
+                return .failure(error)
+            }
             
             do {
                 let decodedData = try JSONDecoder().decode(T.self, from: data)
@@ -46,16 +48,16 @@ final class NetworkManager: NetworkManagerProtocol {
         }
     }
     
-    private func validateResponse(_ response: HTTPURLResponse) throws {
+    private func validateResponse(_ response: HTTPURLResponse) -> NetworkError? {
         switch response.statusCode {
         case 200...299:
-            ()
+            nil
         case 400...499:
-            throw NetworkError.clientError(response.statusCode)
+            NetworkError.clientError(response.statusCode)
         case 500...599:
-            throw NetworkError.serverError(response.statusCode)
+            NetworkError.serverError(response.statusCode)
         default:
-            throw NetworkError.unknownError(response.statusCode)
+            NetworkError.unknownError(response.statusCode)
         }
     }
 }
