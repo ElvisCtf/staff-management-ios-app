@@ -75,7 +75,7 @@ enum DataState {
         staffs += fetchedStaffs
         databaseService?.cacheStaffs(fetchedStaffs)
         
-        if state == .empty {
+        if state == .empty && !staffs.isEmpty {
             state = .hasData
         }
     }
