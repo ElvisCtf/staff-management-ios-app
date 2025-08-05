@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-enum TextFieldFocus: Hashable {
-    case email
-    case password
-}
-
 @Observable final class LoginViewModel {
     var emailInput = ""
     var isEmailValid: Bool? = nil

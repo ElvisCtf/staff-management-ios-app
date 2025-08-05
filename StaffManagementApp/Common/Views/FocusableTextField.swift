@@ -8,44 +8,57 @@
 import SwiftUI
 
 struct FocusableTextField: View {
+    @State var isSecure: Bool = true
     @Binding var input: String
     @Binding var isValid: Bool?
-    
-    var title: String
-    var errorMessage: String
-    var isSecure: Bool = false
-    var keyboardType : UIKeyboardType = .default
+    var focusBinding: FocusState<TextFieldType?>.Binding
+   
+    var type: TextFieldType
     var submitLabel: SubmitLabel = .done
-    var focusTag: TextFieldFocus
-    var focusBinding: FocusState<TextFieldFocus?>.Binding
-    var validate: (String) -> Bool
     var onSubmit: () -> Void = { }
     
     var body: some View {
         VStack {
-            Group {
-                if isSecure {
-                    SecureField(title, text: $input)
-                        .focused(focusBinding, equals: focusTag)
-                } else {
-                    TextField(title, text: $input)
-                        .focused(focusBinding, equals: focusTag)
+            HStack {
+                Group {
+                    if type == .password && isSecure {
+                        SecureField(type.placeholder, text: $input)
+                            .focused(focusBinding, equals: type)
+                    } else {
+                        TextField(type.placeholder, text: $input)
+                            .focused(focusBinding, equals: type)
+                    }
+                }
+                .textFieldStyle(.plain)
+                .keyboardType(type.keyboardType)
+                .textInputAutocapitalization(.never)
+                .disableAutocorrection(true)
+                .submitLabel(submitLabel)
+                .onChange(of: input) { _, newValue in
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        isValid = type.validator(newValue)
+                    }
+                }
+                .onSubmit(onSubmit)
+                .padding(EdgeInsets(top: 16, leading: 12, bottom: 16, trailing: 12))
+                
+                if type == .password {
+                    Button(action: {
+                        isSecure.toggle()
+                    }) {
+                        Image(systemName: isSecure ? "eye.slash" : "eye")
+                            .foregroundColor(.gray)
+                    }
+                    .padding(.trailing, 12)
                 }
             }
-            .textFieldStyle(.roundedBorder)
-            .keyboardType(keyboardType)
-            .textInputAutocapitalization(.never)
-            .disableAutocorrection(true)
-            .submitLabel(submitLabel)
-            .onChange(of: input) { _, newValue in
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    isValid = validate(newValue)
-                }
-            }
-            .onSubmit(onSubmit)
+            .overlay(
+                RoundedRectangle(cornerRadius: 4)
+                    .stroke(.gray, lineWidth: 1)
+            )
             
             if isValid == false {
-                Text(errorMessage)
+                Text(type.errorMessage)
                     .font(.system(size: 12, weight: .regular))
                     .foregroundColor(.red)
                     .padding(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
@@ -53,4 +66,18 @@ struct FocusableTextField: View {
             }
         }
     }
+}
+
+#Preview {
+    @Previewable @State var input: String = ""
+    @Previewable @State var isValid: Bool? = false
+    @FocusState var focusedField: TextFieldType?
+    
+    FocusableTextField(
+        input: $input,
+        isValid: $isValid,
+        focusBinding: $focusedField,
+        type: .password
+    )
+    .padding(16)
 }
