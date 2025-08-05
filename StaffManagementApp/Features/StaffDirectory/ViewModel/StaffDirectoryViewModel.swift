@@ -29,7 +29,6 @@ enum DataState {
     init(apiService: UsersAPIServiceProtocol, keychainService: KeychainServiceProtocol) {
         self.apiService = apiService
         self.keychainService = keychainService
-        token = keychainService.readToken() ?? ""
     }
     
     func setDatabaseService(_ dbService: DatabaseServiceProtocol?) {
@@ -39,6 +38,10 @@ enum DataState {
             state = .hasData
             isOfflineMode = true
         }
+    }
+    
+    func showToken() {
+        token = keychainService.readToken() ?? ""
     }
     
     func logout() {

@@ -26,6 +26,7 @@ struct StaffDirectoryView: View {
         .navigationBarBackButtonHidden(true)
         .onAppear {
             viewModel.setDatabaseService(DatabaseService(context: context))
+            viewModel.showToken()
         }
         .toolbar {
             ToolbarItemGroup(placement: .bottomBar) {
