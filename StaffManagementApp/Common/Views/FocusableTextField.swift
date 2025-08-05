@@ -54,7 +54,7 @@ struct FocusableTextField: View {
             }
             .overlay(
                 RoundedRectangle(cornerRadius: 4)
-                    .stroke(.gray, lineWidth: 1)
+                    .stroke(isValid == false ? .red : .gray, lineWidth: 1)
             )
             
             if isValid == false {
