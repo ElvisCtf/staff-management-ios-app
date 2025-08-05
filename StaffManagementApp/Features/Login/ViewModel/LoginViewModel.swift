@@ -18,10 +18,10 @@ import SwiftUI
     var isShowAlert = false
     var isLoginSuccess = false
     
-    @ObservationIgnored private let apiService: APIServiceProtocol
+    @ObservationIgnored private let apiService: LoginAPIServiceProtocol
     @ObservationIgnored private let keychainService: KeychainServiceProtocol
     
-    init(apiService: APIServiceProtocol, keychainService: KeychainServiceProtocol) {
+    init(apiService: LoginAPIServiceProtocol, keychainService: KeychainServiceProtocol) {
         self.apiService = apiService
         self.keychainService = keychainService
     }

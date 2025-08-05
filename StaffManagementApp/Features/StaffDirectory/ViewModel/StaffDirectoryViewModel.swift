@@ -21,12 +21,12 @@ enum DataState {
     @ObservationIgnored var nextPage = 1
     @ObservationIgnored var numberOfPages = 0
     
-    @ObservationIgnored private let apiService: APIServiceProtocol
+    @ObservationIgnored private let apiService: UsersAPIServiceProtocol
     @ObservationIgnored private let keychainService: KeychainServiceProtocol
     @ObservationIgnored private var databaseService: DatabaseServiceProtocol? = nil
     @ObservationIgnored private var isOfflineMode = false
     
-    init(apiService: APIServiceProtocol, keychainService: KeychainServiceProtocol) {
+    init(apiService: UsersAPIServiceProtocol, keychainService: KeychainServiceProtocol) {
         self.apiService = apiService
         self.keychainService = keychainService
         token = keychainService.readToken() ?? ""

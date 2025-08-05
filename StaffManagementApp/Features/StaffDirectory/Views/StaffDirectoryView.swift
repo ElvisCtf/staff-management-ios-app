@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct StaffDirectoryView: View {
-    @State var viewModel = StaffDirectoryViewModel(apiService: APIService(), keychainService: KeychainService())
+    @State var viewModel = StaffDirectoryViewModel(apiService: UsersAPIService(), keychainService: KeychainService())
     @Environment(Router.self) private var router
     @Environment(\.modelContext) private var context
     

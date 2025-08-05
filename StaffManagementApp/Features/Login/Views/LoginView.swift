@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LoginView: View {
-    @State private var viewModel = LoginViewModel(apiService: APIService(), keychainService: KeychainService())
+    @State private var viewModel = LoginViewModel(apiService: LoginAPIService(), keychainService: KeychainService())
     @FocusState private var focusedField: TextFieldType?
     @Environment(Router.self) private var router
     
