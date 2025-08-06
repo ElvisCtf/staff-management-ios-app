@@ -24,12 +24,14 @@ struct CachingTests {
         let sut = StaffDirectoryViewModel(apiService: ValidUsersAPIService(), keychainService: MockKeychainService())
         sut.setDatabaseService(NonCachedDatabaseService(context: try createMockContext()))
         
-        // mock fetch API data
+        // Fetch page 1 data from mock APIService
         await sut.getStaffs()
         
+        // Fetch page 2 data from mock APIService
         var lastStaffInCurrentPage = sut.staffs.last!
         await sut.loadMoreIfNeeded(current: lastStaffInCurrentPage)
         
+        // Fetch page 3 data from mock APIService
         lastStaffInCurrentPage = sut.staffs.last!
         await sut.loadMoreIfNeeded(current: lastStaffInCurrentPage)
         
@@ -41,12 +43,14 @@ struct CachingTests {
         let sut = StaffDirectoryViewModel(apiService: ValidUsersAPIService(), keychainService: MockKeychainService())
         sut.setDatabaseService(NonCachedDatabaseService(context: try createMockContext()))
         
-        // fetch Data from Mock API
+        // Fetch page 1 data from mock APIService
         await sut.getStaffs()
         
+        // Fetch page 2 data from mock APIService
         var lastStaffInCurrentPage = sut.staffs.last!
         await sut.loadMoreIfNeeded(current: lastStaffInCurrentPage)
         
+        // Fetch page 3 data from mock APIService
         lastStaffInCurrentPage = sut.staffs.last!
         await sut.loadMoreIfNeeded(current: lastStaffInCurrentPage)
         
