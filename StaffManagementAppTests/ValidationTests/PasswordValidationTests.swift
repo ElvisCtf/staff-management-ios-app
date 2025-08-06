@@ -25,14 +25,20 @@ struct PasswordValidationTests {
     }
 
     @Test func testInvalidDueToCharacters() {
-        // Contains special character
+        // Contains special character at the end
         #expect("abc123!".isPassword == false)
+        
+        // Contains special character in middle
+        #expect("abc_123".isPassword == false)
+        
+        // Contains special character at the start
+        #expect("@abc123".isPassword == false)
         
         // Contains space
         #expect("abc 123".isPassword == false)
         
-        // Contains underscore
-        #expect("abc_123".isPassword == false)
+        // Contains only special characters
+        #expect("~!@#$%^&*()_+{}|:\"?>< ".isPassword == false)
     }
 
     @Test func testEmptyString() {

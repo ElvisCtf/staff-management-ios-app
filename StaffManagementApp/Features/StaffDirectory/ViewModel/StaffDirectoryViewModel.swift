@@ -23,7 +23,7 @@ enum DataState {
     
     @ObservationIgnored private let apiService: UsersAPIServiceProtocol
     @ObservationIgnored private let keychainService: KeychainServiceProtocol
-    @ObservationIgnored private var databaseService: DatabaseServiceProtocol? = nil
+    @ObservationIgnored private(set) var databaseService: DatabaseServiceProtocol? = nil
     @ObservationIgnored private(set) var isOfflineMode = false
     
     init(apiService: UsersAPIServiceProtocol, keychainService: KeychainServiceProtocol) {

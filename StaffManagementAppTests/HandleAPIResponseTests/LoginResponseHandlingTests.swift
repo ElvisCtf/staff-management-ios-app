@@ -12,7 +12,7 @@ struct LoginResponseHandlingTests {
     let mockKeychainService = MockKeychainService()
     
     @Test func testReceiveValidToken() async {
-        let sut = LoginViewModel(apiService: ValidLoginApiService(), keychainService: mockKeychainService)
+        let sut = LoginViewModel(apiService: ValidLoginAPIService(), keychainService: mockKeychainService)
         sut.isEmailValid = true
         sut.isPasswordValid = true
         
@@ -23,7 +23,7 @@ struct LoginResponseHandlingTests {
     }
     
     @Test func testReceiveEmptyToken() async {
-        let sut = LoginViewModel(apiService: EmptyLoginApiService(), keychainService: mockKeychainService)
+        let sut = LoginViewModel(apiService: EmptyLoginAPIService(), keychainService: mockKeychainService)
         sut.isEmailValid = true
         sut.isPasswordValid = true
         
@@ -34,7 +34,7 @@ struct LoginResponseHandlingTests {
     }
     
     @Test func testReceiveNilToken() async {
-        let sut = LoginViewModel(apiService: NilLoginApiService(), keychainService: mockKeychainService)
+        let sut = LoginViewModel(apiService: NilLoginAPIService(), keychainService: mockKeychainService)
         sut.isEmailValid = true
         sut.isPasswordValid = true
         
@@ -45,7 +45,7 @@ struct LoginResponseHandlingTests {
     }
     
     @Test func testReceiveError() async {
-        let sut = LoginViewModel(apiService: ErrorLoginApiService(), keychainService: mockKeychainService)
+        let sut = LoginViewModel(apiService: ErrorLoginAPIService(), keychainService: mockKeychainService)
         sut.isEmailValid = true
         sut.isPasswordValid = true
         
@@ -57,28 +57,28 @@ struct LoginResponseHandlingTests {
 }
 
 
-final class ValidLoginApiService: LoginAPIServiceProtocol {
+final class ValidLoginAPIService: LoginAPIServiceProtocol {
     func postLogin(with dto: StaffManagementApp.LoginRequestDto) async -> Result<StaffManagementApp.LoginResponseDto, StaffManagementApp.NetworkError> {
         return .success(LoginResponseDto(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"))
     }
 }
 
 
-final class EmptyLoginApiService: LoginAPIServiceProtocol {
+final class EmptyLoginAPIService: LoginAPIServiceProtocol {
     func postLogin(with dto: StaffManagementApp.LoginRequestDto) async -> Result<StaffManagementApp.LoginResponseDto, StaffManagementApp.NetworkError> {
         return .success(LoginResponseDto(token: ""))
     }
 }
 
 
-final class NilLoginApiService: LoginAPIServiceProtocol {
+final class NilLoginAPIService: LoginAPIServiceProtocol {
     func postLogin(with dto: StaffManagementApp.LoginRequestDto) async -> Result<StaffManagementApp.LoginResponseDto, StaffManagementApp.NetworkError> {
         return .success(LoginResponseDto(token: nil))
     }
 }
 
 
-final class ErrorLoginApiService: LoginAPIServiceProtocol {
+final class ErrorLoginAPIService: LoginAPIServiceProtocol {
     func postLogin(with dto: StaffManagementApp.LoginRequestDto) async -> Result<StaffManagementApp.LoginResponseDto, StaffManagementApp.NetworkError> {
         return .failure(.connectionError)
     }

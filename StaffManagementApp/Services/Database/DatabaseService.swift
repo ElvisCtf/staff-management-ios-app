@@ -8,14 +8,6 @@
 import SwiftData
 import Foundation
 
-protocol DatabaseServiceProtocol {
-    var context: ModelContext { get }
-    
-    func cacheStaffs(_ staffs: [Staff])
-    func getStaffs() -> [Staff]
-    func clearStaffs()
-}
-
 final class DatabaseService: DatabaseServiceProtocol {
     var context: ModelContext
     
